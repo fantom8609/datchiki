@@ -32,19 +32,20 @@ class SiteController
     public function actionUpdateTs()
     {
 
-
         if(!empty($_POST['temperature'])) {
             $temperature = htmlspecialchars(trim(($_POST['temperature'])));
-        } 
+        }
         else {
-            $temperature = "20";
+            $params_vent = Model::getParams();
+            $pressure = $params_vent['temperature'];
         }
 
         if(!empty($_POST['speed'])) {
             $speed = htmlspecialchars(trim(($_POST['speed'])));
         }
         else {
-            $speed = "0";
+            $params_vent = Model::getParams();
+            $pressure = $params_vent['speed'];
         }
 
         Model::setTs($temperature,$speed);
@@ -68,7 +69,8 @@ class SiteController
             $pressure = htmlspecialchars(trim(($_POST['pressure'])));
         } 
         else {
-            $pressure = "неизвестно";
+            $params_piston = Model::getPistonParams();
+            $pressure = $params_piston['pressure'];
         }
         Model::setPresure($pressure);
         echo $pressure;
