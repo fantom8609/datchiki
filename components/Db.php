@@ -27,4 +27,8 @@ class Db
         return $db;
     }
 
+    private function __destruct() {
+        echo "Destruct DB!";   
+    }
+
 }
