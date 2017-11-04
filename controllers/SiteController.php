@@ -3,22 +3,46 @@
 /**
  * Контроллер SiteController
  */
-class SiteController
-{
+class SiteController {
 
     /**
      * Action для главной страницы
      */
-    public function actionIndex()
-    {
-        $params = Model::getParams();
-        $temperature = $params['temperature'];
-        $speed = $params['speed'];
-        $trig = $params['trig'];
+    public function actionIndex() {
+        $name = false;
+        $value = false;
+        $izm = false;
+        if (isset($_POST['submit'])) {
+            $name = htmlspecialchars(trim($_POST['name']));
+            $value = htmlspecialchars(trim($_POST['value']));
+            $izm = htmlspecialchars(trim($_POST['izm']));
+            if (gettype($value) !== "double") {
+                $errors[] = "Значение должно быть числового типа";
+            }
+            Model::createDatchik($name, $value, $izm);
+            header("Location: index.php");
+        }
+        $datchiki = Model::getDatchiki();
 
-        $params_piston = Model::getPistonParams();
-        $pressure = $params_piston['pressure'];
-        $trig_piston = $params_piston['trig'];
+
+
+
+/*//установка в ручную        
+        if (isset($_POST['set'])) {
+            $new_value = array();
+            foreach($datchiki as $datchik) {
+                $name = $datchik['name'];
+                $new_value[$name] = htmlspecialchars(trim($_POST['$name']));
+                if (gettype($new_value[$name]) !== "double") {
+                    $errors[] = "Значение должно быть числового типа";
+                }
+                Model::setValue($new_value);
+                header("Location: index.php");
+                echo "string";
+            }
+        }*/
+
+
 
 
         // Подключаем вид
@@ -26,57 +50,10 @@ class SiteController
         return true;
     }
 
-    /**
-     * Action для установки скорости и температуры
-     */
-    public function actionUpdateTs()
+    public function actionDeleteDatchik($id)
     {
-
-        if(!empty($_POST['temperature'])) {
-            $temperature = htmlspecialchars(trim(($_POST['temperature'])));
-        }
-        else {
-            $params_vent = Model::getParams();
-            $pressure = $params_vent['temperature'];
-        }
-
-        if(!empty($_POST['speed'])) {
-            $speed = htmlspecialchars(trim(($_POST['speed'])));
-        }
-        else {
-            $params_vent = Model::getParams();
-            $pressure = $params_vent['speed'];
-        }
-
-        Model::setTs($temperature,$speed);
-        $callback = array();
-        $callback['temperature'] = $temperature;
-        $callback['speed'] = $speed;
-        $callback = json_encode($callback);
-        print_r($callback);
-        // Подключаем вид
-        //require_once(ROOT . '/views/site/index.php');
-        return true;
+        // Добавляем товар в корзину и печатаем результат: количество товаров в корзине
+        Model::deleteDatchik($id);
+        header("Location: /");
     }
-
-
-    /**
-     * Action для установки давления
-     */
-    public function actionUpdatePressure()
-    {
-       if(!empty($_POST['pressure'])) {
-            $pressure = htmlspecialchars(trim(($_POST['pressure'])));
-        } 
-        else {
-            $params_piston = Model::getPistonParams();
-            $pressure = $params_piston['pressure'];
-        }
-        Model::setPresure($pressure);
-        echo $pressure;
-        return true;
-    }
-
-    
-
 }

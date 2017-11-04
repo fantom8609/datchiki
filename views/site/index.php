@@ -1,35 +1,45 @@
 <?php include ROOT . '/views/layouts/header.php'; ?>
 <section>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-6">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
 
-				<!-- Задание значений для датчиков -->
-				<span>Датчик температуры</span><br>
-				<input type="text" name="temperature">°С<br>
-				<span>Датчик скорости </span><br>
-				<input type="text" name="speed">об/сек<br><br>
-				<input type="button" class="btn btn-success set_ts"  value="установить значения датчиков"> 
+                <!--вывод всех датчиков-->
+                <form method="post">
+                    <?php foreach($datchiki as $datchik): ?>
+                    <span><?php echo $datchik['name'];?></span><br>
+                    <input type="text" name="<?php echo $datchik['name'];?>"> <span><?php echo $datchik['izm'];?></span><br>
+                    <a href="/delete/<?php echo $datchik['id'];?>" class="btn datchik-delete">удалить</a> <br><br>
+                    <?php endforeach; ?>
+                    <input type="submit" name="set" value="Установить значения датчиков"> 
 
-				<!-- Исполнительные механизмы -->
-				<h4>Вентилятор</h4>
-				<p>Состояние: <?php if($trig == "0") {echo "Выключен";} else {echo "Включен";}?></p>
-				<p>Скорость: <span id="result_s"><?php if($trig == "0") {echo "0";} else {echo $speed;}?>об/сек</span></p>
-				<p>Температура: <span id="result_t"><?php echo $temperature;?>°С</span></p><br>
-				
-			</div>
+                </form>
+                <br>
 
-			<div class="col-md-6">
-				<span>Датчик давления в поршне </span><br>
-				<input type="text" name="pressure">
-				<input type="button" class="btn btn-success set_pressure"  value="установить значение датчика"> <br><br>
-				<h4>Поршень</h4>
-				<p>Состояние: <?php if($trig == "0") {echo "Выключен";} else {echo "Включен";}?></p>
-				<p>Давление: <span id="result_p"><?php echo $pressure;?>Па</span></p>
-				
-			</div>	
+                <div class="event_cont"> 
+                    <div class="event_visible">                
+                        <div class="visible_cont">
+                            <a  title="" href="javascript:;" onmousedown="slidedown('mydiv');slideup('mydiv');">Добавить датчик</a>
+                        </div>
+                    </div>
 
-		</div>
-	</div>
+                    <div id="mydiv" class="about" style="display:none; overflow:hidden; height:265px;">  
+                        <form method="POST">
+                            <span>Название</span> <br>
+                            <input type="text" name="name"> <br>
+                            <span>Значение</span><br>
+                            <input type="text" name="value"> <br>
+                            <span>Единица измерения</span><br>
+                            <input type="text" name="izm"> <br><br>
+                            <input type="submit" name="submit" value="Добавить"> 
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
 </section>
 <?php include ROOT . '/views/layouts/footer.php'; ?>

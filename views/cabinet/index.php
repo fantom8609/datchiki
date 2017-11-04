@@ -4,20 +4,40 @@
 		<div class="col-md-6 col-md-offset-3 table-responsive">
 			<h3 class="text-center">Панель управления</h3>
 			<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+
 				<tr>
 					<td class="text-center">Исполнительное устройство</td>
-					<td>Температура</td>
-					<td>Частота</td>
-					<td>Скорость</td>
-					<td>Давление</td>
 					<td>Состояние</td>
-					<td>Действие</td>
+
+					<?php foreach($data as $item): ?>
+					<td><?php echo $item['datchik_name']; ?></td>
+				    <?php endforeach; ?>
 				</tr>
 				
-					<?php foreach($ustroistva as $item): ?>
+
+
+					<?php 
+					//array_unique($data[$i]);
+					$names = array();
+					 foreach($data as $item): ?>
 				<tr>
-						<td><?php echo $item['name'];?></td>
+						<td><?php 
+						    if(in_array($item['name'], $names)) {continue;} 
+						    else { echo $item['name'];
+						    $names[] = $item['name']; } ?>		
+						</td>
+
 						<td><?php if($item['trig'] == 1) {echo "Включено";} else {echo "Выключено";}?></td>
+
+					<?php $name = $item['name'];
+					foreach($data as $item): ?>
+						<td> <?php 
+						if($name != $item['name']) {continue;}
+						echo $item['value']. " ".$item['izm'];
+						?></td>
+					<?php endforeach; ?>
 				</tr>
 					<?php endforeach; ?>
 				

@@ -2,93 +2,81 @@
 
 class Model
 {
-    // Установка параметров для вентилятора
-    public static function setTs($temperature,$speed) {
+    // Добавление датчика
+    public static function createDatchik($name, $value, $izm) {
 
         $db = Db::getConnection();
         // Текст запроса к БД
-        $sql = 'INSERT INTO vent (temperature, speed) '
-        . 'VALUES (:temperature, :speed)';
+        $sql = 'INSERT INTO datchik (name, value, izm) '
+        . 'VALUES (:name, :value, :izm)';
 
         // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
-        $result->bindParam(':temperature', $temperature, PDO::PARAM_STR);
-        $result->bindParam(':speed', $speed, PDO::PARAM_STR);
-        $result->execute();
+        $result->bindParam(':name', $name, PDO::PARAM_STR);
+        $result->bindParam(':value', $value, PDO::PARAM_INT);
+        $result->bindParam(':izm', $izm, PDO::PARAM_STR);
+        if($result->execute()) {echo "OK";} else {echo "FAILT";};
         return true;
     }
 
 
-//Получение всех параметрво для вентилятора
-    public static function getParams() {
-         // Соединение с БД
-        $db = Db::getConnection();
 
+    public static function getDatchiki()
+    {
+        // Соединение с БД
+        $db = Db::getConnection();
         // Запрос к БД
-        $sql = 'SELECT temperature, speed, trig FROM vent WHERE id = (SELECT MAX(id) FROM vent)';
-        
-        // Используется подготовленный запрос
-        $result = $db->query($sql);
-
+        $result = $db->query('SELECT * FROM datchik');
         // Получение и возврат результатов
-        $params = $result->fetch();
-
-        //print_r($params);
-
-        return $params;
+        $i = 0;
+        $list = array();
+        while ($row = $result->fetch()) {
+            $list[$i]['id'] = $row['id'];
+            $list[$i]['name'] = $row['name'];
+            $list[$i]['value'] = $row['value'];
+            $list[$i]['izm'] = $row['izm'];
+            $i++;
+        }
+        return $list;
     }
-    
 
-       // Установка параметров для поршня
-    public static function setPresure($pressure) {
-
+    public static function deleteDatchik($id)
+    {
+        // Соединение с БД
         $db = Db::getConnection();
+
         // Текст запроса к БД
-        $sql = 'INSERT INTO piston (pressure) '
-        . 'VALUES (:pressure)';
+        $sql = 'DELETE FROM datchik WHERE id = :id';
 
         // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
-        $result->bindParam(':pressure', $pressure, PDO::PARAM_STR);
-        $result->execute();
-        return true;
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        return $result->execute();
     }
 
 
-    //Получение параметров для поршня
 
-    public static function getPistonParams() {
-         // Соединение с БД
-        $db = Db::getConnection();
 
-        // Запрос к БД
-        $sql = 'SELECT pressure, trig FROM piston WHERE id = (SELECT MAX(id) FROM piston)';
-        
-        // Используется подготовленный запрос
-        $result = $db->query($sql);
 
-        // Получение и возврат результатов
-        $params_piston = $result->fetch();
 
-        //print_r($params_piston);
-
-        return $params_piston;
+    //пароль должен быть не меньше 6 символов
+    public static function checkPassword($password)
+    {
+        if (strlen($password) >= 6) {
+            return true;
+        }
+        return false;
     }
 
 
-    /*=======================================================
-                      Работа с пользователем
-    ==========================================================*/
 
     // проверяем существует ли пользователь админпанели
     public static function checkUserData($login, $password)
     {
         // Соединение с БД
         $db = Db::getConnection();
-
         // Текст запроса к БД
         $sql = 'SELECT * FROM user WHERE login = :login AND password = :password';
-
         // Получение результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
         $result->bindParam(':login', $login, PDO::PARAM_STR);
@@ -96,36 +84,12 @@ class Model
         
         
         $result->execute();
-
         // Обращаемся к записи
         $user = $result->fetch();
         
-
         if ($user) {
             // Если запись существует, возвращаем id пользователя
             return $user['id'];
-        }
-        return false;
-    }
-
-
-
-    //проверяем авторизован ли пользователь
-    public static function checkLogged()
-    {
-        // Если сессия есть, вернем идентификатор пользователя
-        if (isset($_SESSION['user'])) {
-            return $_SESSION['user'];
-        }
-        header("Location: /user/login");
-    }
-
-
-   //пароль должен быть не меньше 6 символов
-    public static function checkPassword($password)
-    {
-        if (strlen($password) >= 6) {
-            return true;
         }
         return false;
     }
@@ -138,18 +102,16 @@ class Model
         $_SESSION['user'] = $userId;
     }
 
-/*==========================================================
-                Работа в панели управления
-============================================================*/
 
-    public static function getUstroistva()
+    public static function getData()
     {
         // Соединение с БД
         $db = Db::getConnection();
-
         // Запрос к БД
-        $result = $db->query('SELECT id, name, trig FROM ustroistvo');
-
+        $result = $db->query('SELECT ustroistva.id, ustroistva.name, ustroistva.trig, datchik.name as datchik_name, datchik.value,datchik.izm 
+            FROM ustroistva
+            INNER JOIN datchik
+            ON ustroistva.id = datchik.ustroistvo_id');
         // Получение и возврат результатов
         $i = 0;
         $list = array();
@@ -157,6 +119,9 @@ class Model
             $list[$i]['id'] = $row['id'];
             $list[$i]['name'] = $row['name'];
             $list[$i]['trig'] = $row['trig'];
+            $list[$i]['datchik_name'] = $row['datchik_name'];
+            $list[$i]['value'] = $row['value'];
+            $list[$i]['izm'] = $row['izm'];
             $i++;
         }
         return $list;
@@ -164,12 +129,5 @@ class Model
 
 
 
-
-
-
-
-
-
-
-
 }
+

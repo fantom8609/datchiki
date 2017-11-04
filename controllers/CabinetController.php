@@ -12,7 +12,7 @@ class CabinetController
     public function actionIndex()
     {
 
-        $ustroistva = Model::getUstroistva();
+        $data = Model::getData();
         // Подключаем вид
         require_once(ROOT . '/views/cabinet/index.php');
         return true;
