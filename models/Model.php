@@ -21,6 +21,26 @@ class Model
 
 
 
+
+     public static function getUstroistvoTrig($id)
+    {
+        // Соединение с БД
+        $db = Db::getConnection();
+        // Запрос к БД
+        $sql = 'SELECT * FROM ustroistva  WHERE id = :id';
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        $result->execute();
+        // Обращаемся к записи
+        $ustroistvo = $result->fetch();
+        if ($ustroistvo) {
+            // Если запись существует, возвращаем id пользователя
+            return $ustroistvo['trig'];
+        }
+    }
+
+
+
     public static function getDatchiki()
     {
         // Соединение с БД
@@ -126,6 +146,52 @@ class Model
         }
         return $list;
     }
+
+
+
+
+    public static function tumbler($id)
+    {
+        // Соединение с БД
+        $db = Db::getConnection();
+        $trig = Model::getUstroistvoTrig($id);
+        if($trig == 1) {$trig = 0;}
+        else {$trig = 1;}
+        
+        // Текст запроса к БД
+        $sql = "UPDATE ustroistva 
+            SET trig = :trig
+            WHERE id = :id";
+
+        // Получение и возврат результатов. Используется подготовленный запрос
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        $result->bindParam(':trig', $trig, PDO::PARAM_INT);
+        return $result->execute();
+    }
+
+
+
+       public static function off($id)
+    {
+        // Соединение с БД
+        $db = Db::getConnection();
+
+        $trig = 0;
+
+        // Текст запроса к БД
+        $sql = "UPDATE ustroistva 
+            SET trig = :trig
+            WHERE id = :id";
+
+        // Получение и возврат результатов. Используется подготовленный запрос
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        $result->bindParam(':trig', $trig, PDO::PARAM_INT);
+        return $result->execute();
+    }
+
+
 
 
 

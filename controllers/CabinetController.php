@@ -62,4 +62,14 @@ class CabinetController
         return true;
     }
 
+
+
+    public function actionTumbler($id)
+    {
+        Model::tumbler($id);
+        // Подключаем вид
+        header("Location: /cabinet/index.php");
+        return true;
+    }
+
 }

@@ -29,7 +29,23 @@
 						    $names[] = $item['name']; } ?>		
 						</td>
 
-						<td><?php if($item['trig'] == 1) {echo "Включено";} else {echo "Выключено";}?></td>
+						<td>
+							<?php if($item['trig'] == 1): ?>
+						    <span id="status">Включено</span>
+						    <a href="/cabinet/tumbler/<?php echo $item['id'];?>">тумблер</a><br>
+
+						    <?php elseif($item['trig'] == 0):?>
+                            <span id="status">Выключено</span>
+						    <a href="/cabinet/tumbler/<?php echo $item['id'];?>">тумблер</a><br>
+
+						    <?php endif; ?>
+						    
+
+
+
+						</td>
+
+
 
 					<?php $name = $item['name'];
 					foreach($data as $item): ?>
@@ -46,6 +62,4 @@
 		</div>
 	</div>
 </div>
-<script src="/template/js/jquery.js"></script>
-<script src="/template/js/bootstrap.min.js"></script>
-<script src="/template/js/main.js"></script>
+<?php include ROOT . '/views/layouts/footer.php'; ?>

@@ -18,15 +18,30 @@
 <script src="/template/js/main.js"></script>
 <script src="/template/js/motionpack.js"></script>
 <script>
-  /*$(document).ready(function(){
+  $(document).ready(function(){
 
-    $(".datchik-delete").click(function () {
+
+/*//Включить
+    $(".activate").click(function () {
         var id = $(this).attr("data-id");
-        $.post("/delete/"+id, {}, function (data) {
+        $.post("/cabinet/activate/"+id, {}, function (data) {
+          $("#status").html('Включено');
         });
         return false;
     });
-});*/
+
+//Выключить
+    $(".off").click(function () {
+        var id = $(this).attr("data-id");
+        $.post("/cabinet/off/"+id, {}, function (data) {
+          $("#status").html('Выключено');
+        });
+        return false;
+    });*/
+
+
+
+});
 </script>
 
 </body>

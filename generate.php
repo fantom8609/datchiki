@@ -18,5 +18,7 @@ foreach($list as $datchik) {
 	$result->bindParam(':id', $id, PDO::PARAM_INT);
 	$result->bindParam(':value', $new_value, PDO::PARAM_INT);
 	$result->execute();
+ 
+
 }
 ?>
