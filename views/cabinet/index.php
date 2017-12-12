@@ -19,7 +19,9 @@
 						<?php if($ustroistvo['id'] == $datchik['ustroistvo_id']): ?>
 				    <tr>
                        <td><?php echo $datchik['name']; ?></td>
-                       <td><?php echo $datchik['value'].$datchik['izm']; ?></td>
+                       <td><?php echo $datchik['value'].$datchik['izm'];?><a href="/cabinet/ustanovka/<?php echo $datchik['id'];?>">
+                       	<i style="float: right;" class="fa fa-cogs" aria-hidden="true"></i></a></td>
+
                    </tr>
                         <?php endif; ?>
 				    <?php endforeach; ?>

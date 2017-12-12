@@ -76,6 +76,29 @@ class Model
 
 
 
+
+    public static function setValue($id, $new_value)
+    {
+        // Соединение с БД
+        $db = Db::getConnection();
+
+        // Текст запроса к БД
+        $sql = "UPDATE datchik
+            SET 
+                value = :new_value 
+            WHERE id = :id";
+
+        // Получение и возврат результатов. Используется подготовленный запрос
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        $result->bindParam(':new_value', $new_value, PDO::PARAM_STR);
+        
+        $result->execute();
+        return true;
+    }
+
+
+
     public static function getDatchiki()
     {
         // Соединение с БД
@@ -96,6 +119,30 @@ class Model
         }
         return $list;
     }
+
+    public static function getDatchik($id)
+    {
+        // Соединение с БД
+        $db = Db::getConnection();
+
+        // Текст запроса к БД
+        $sql = 'SELECT * FROM datchik WHERE id = :id';
+
+        // Используется подготовленный запрос
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Указываем, что хотим получить данные в виде массива
+        $result->setFetchMode(PDO::FETCH_ASSOC);
+
+        // Выполнение коменды
+        $result->execute();
+
+        // Получение и возврат результатов
+        return $result->fetch();
+    }
+
+
 
     public static function deleteDatchik($id)
     {

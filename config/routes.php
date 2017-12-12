@@ -1,7 +1,7 @@
 <?php
 
 return array(
-
+    'cabinet/ustanovka/([0-9]+)' => 'cabinet/ustanovka/$1',
 	'cabinet/trig/([0-9]+)' => 'cabinet/trig/$1',
     'cabinet/index.php' => 'cabinet/index',
     'cabinet/login' => 'cabinet/login',

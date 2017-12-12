@@ -74,4 +74,28 @@ class CabinetController
         return true;
     }
 
+//установка датчика вручную
+    public function actionUstanovka($id)
+    {
+
+        $datchik = Model::getDatchik($id);
+       
+        if (isset($_POST['set_value'])) {
+            $new_value = htmlspecialchars(trim($_POST['new_value']));
+
+            if (gettype($new_value) !== "double") {
+                $errors[] = "Значение должно быть числового типа";
+            }
+
+            Model::setValue($id, $new_value);
+            header("Location: /cabinet/index.php");
+       
+        }
+
+
+
+        require_once(ROOT . '/views/cabinet/ustanovka.php');
+        return true;
+    }
+
 }
