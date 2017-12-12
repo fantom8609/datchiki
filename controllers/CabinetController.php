@@ -12,7 +12,9 @@ class CabinetController
     public function actionIndex()
     {
 
-        $data = Model::getData();
+        //$data = Model::getData();
+        $ustroistva = Model::getUstroistva();
+        $datchiki = Model::getDatchiki();
         // Подключаем вид
         require_once(ROOT . '/views/cabinet/index.php');
         return true;
@@ -64,9 +66,9 @@ class CabinetController
 
 
 
-    public function actionTumbler($id)
+    public function actionTrig($id)
     {
-        Model::tumbler($id);
+        Model::trig($id);
         // Подключаем вид
         header("Location: /cabinet/index.php");
         return true;

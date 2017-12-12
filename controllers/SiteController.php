@@ -11,20 +11,37 @@ class SiteController {
     public function actionIndex() {
         $name = false;
         $value = false;
-        $izm = false;
+        $izm = false; 
+        $name_ustr = false;
+        $value_ustr = false;
+        $ustroistvo_id = false;
+
         if (isset($_POST['submit'])) {
             $name = htmlspecialchars(trim($_POST['name']));
             $value = htmlspecialchars(trim($_POST['value']));
             $izm = htmlspecialchars(trim($_POST['izm']));
-            $ustr_id = htmlspecialchars(trim($_POST['ustr_id']));
+            $ustroistvo_id = htmlspecialchars(trim($_POST['ustroistvo_id']));
             if (gettype($value) !== "double") {
                 $errors[] = "Значение должно быть числового типа";
             }
-            Model::createDatchik($name, $value, $izm, $ustr_id);
+            Model::createDatchik($name, $value, $izm, $ustroistvo_id);
             header("Location: index.php");
         }
-        $datchiki = Model::getDatchiki();
 
+        if (isset($_POST['submit_ustr'])) {
+            $name_ustr = htmlspecialchars(trim($_POST['name_ustr']));
+            $value_ustr = htmlspecialchars(trim($_POST['value_ustr']));
+            if (gettype($value_ustr) !== "int") {
+                $errors[] = "Значение должно быть числового типа";
+            }
+            Model::createUstroistvo($name_ustr, $value_ustr);
+            header("Location: index.php");
+        }
+
+
+
+
+        $datchiki = Model::getDatchiki();
         $ustroistva = Model::getUstroistva();
 
         
@@ -61,4 +78,12 @@ class SiteController {
         Model::deleteDatchik($id);
         header("Location: /");
     }
+
+    public function actionDeleteUstroistvo($id)
+    {
+        // Добавляем товар в корзину и печатаем результат: количество товаров в корзине
+        Model::deleteUstroistvo($id);
+        header("Location: /");
+    }
+
 }

@@ -6,56 +6,25 @@
 			<table class="table table-striped table-bordered table-hover table-condensed">
 
 
-
+            <?php foreach($ustroistva as $ustroistvo): ?>
 				<tr>
-					<td class="text-center">Исполнительное устройство</td>
-					<td>Состояние</td>
-
-					<?php foreach($data as $item): ?>
-					<td><?php echo $item['datchik_name']; ?></td>
+					<td style="background: #cecdcd;"><?php echo $ustroistvo['name']; ?></td>
+				</tr>
+				<tr>
+					<td>Состояние: <?php if($ustroistvo['trig'] == 0){echo "Выкл";} else {echo "Вкл";} ?></td>
+					<td> <a href="/cabinet/trig/<?php echo $ustroistvo['id'];?>" class="btn ustr-trig">Выключатель</a></td>
+				</tr>
+				
+					<?php foreach($datchiki as $datchik): ?>
+						<?php if($ustroistvo['id'] == $datchik['ustroistvo_id']): ?>
+				    <tr>
+                       <td><?php echo $datchik['name']; ?></td>
+                       <td><?php echo $datchik['value'].$datchik['izm']; ?></td>
+                   </tr>
+                        <?php endif; ?>
 				    <?php endforeach; ?>
-				</tr>
 				
-
-					<?php 
-					//array_unique($data[$i]);
-					$names = array();
-					 foreach($data as $item): ?>
-				<tr>
-						<td><?php 
-						    if(in_array($item['name'], $names)) {continue;} 
-						    else { echo $item['name'];
-						    $names[] = $item['name']; } ?>		
-						</td>
-
-						<td>
-							<?php if($item['trig'] == 1): ?>
-						    <span id="status">Включено</span>
-						    <a href="/cabinet/tumbler/<?php echo $item['id'];?>">тумблер</a><br>
-
-						    <?php elseif($item['trig'] == 0):?>
-                            <span id="status">Выключено</span>
-						    <a href="/cabinet/tumbler/<?php echo $item['id'];?>">тумблер</a><br>
-
-						    <?php endif; ?>
-
-						</td>
-
-					<?php $name = $item['name'];
-					foreach($data as $item): ?>
-						<td> <?php 
-						if($name != $item['name']) {continue;}
-						echo $item['value']. " ".$item['izm'];
-						?></td>
-
-
-						<!--Тест-->
-					
-					<?php endforeach; ?>
-				</tr>
-					<?php endforeach; ?>
-				
-
+			<?php endforeach; ?>
 
 			</table>
 		</div>

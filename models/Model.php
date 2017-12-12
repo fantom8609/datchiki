@@ -3,19 +3,34 @@
 class Model
 {
     // Добавление датчика
-    public static function createDatchik($name, $value, $izm, $ustr) {
+    public static function createDatchik($name, $value, $izm, $ustroistvo_id) {
 
         $db = Db::getConnection();
         // Текст запроса к БД
-        $sql = 'INSERT INTO datchik (name, value, izm, ustr_id) '
-        . 'VALUES (:name, :value, :izm, :ustr_id)';
+        $sql = 'INSERT INTO datchik (name, value, izm, ustroistvo_id) '
+        . 'VALUES (:name, :value, :izm, :ustroistvo_id)';
 
         // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
         $result->bindParam(':name', $name, PDO::PARAM_STR);
         $result->bindParam(':value', $value, PDO::PARAM_INT);
         $result->bindParam(':izm', $izm, PDO::PARAM_STR);
-        $result->bindParam(':ustr_id', $ustr_id, PDO::PARAM_STR);
+        $result->bindParam(':ustroistvo_id', $ustroistvo_id, PDO::PARAM_STR);
+        if($result->execute()) {echo "OK";} else {echo "FAILT";};
+        return true;
+    }
+
+    public static function createUstroistvo($name_ustr, $value_ustr) {
+
+        $db = Db::getConnection();
+        // Текст запроса к БД
+        $sql = 'INSERT INTO ustroistva (name, trig) '
+        . 'VALUES (:name_ustr, :value_ustr)';
+
+        // Получение и возврат результатов. Используется подготовленный запрос
+        $result = $db->prepare($sql);
+        $result->bindParam(':name_ustr', $name_ustr, PDO::PARAM_STR);
+        $result->bindParam(':value_ustr', $value_ustr, PDO::PARAM_INT);
         if($result->execute()) {echo "OK";} else {echo "FAILT";};
         return true;
     }
@@ -75,6 +90,8 @@ class Model
             $list[$i]['name'] = $row['name'];
             $list[$i]['value'] = $row['value'];
             $list[$i]['izm'] = $row['izm'];
+            $list[$i]['ustroistvo_id'] = $row['ustroistvo_id'];
+
             $i++;
         }
         return $list;
@@ -87,6 +104,20 @@ class Model
 
         // Текст запроса к БД
         $sql = 'DELETE FROM datchik WHERE id = :id';
+
+        // Получение и возврат результатов. Используется подготовленный запрос
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        return $result->execute();
+    }
+
+    public static function deleteUstroistvo($id)
+    {
+        // Соединение с БД
+        $db = Db::getConnection();
+
+        // Текст запроса к БД
+        $sql = 'DELETE FROM ustroistva WHERE id = :id';
 
         // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
@@ -170,7 +201,7 @@ class Model
 
 
 
-    public static function tumbler($id)
+    public static function trig($id)
     {
         // Соединение с БД
         $db = Db::getConnection();
