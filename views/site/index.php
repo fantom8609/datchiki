@@ -12,8 +12,19 @@
                     <a href="/delete/<?php echo $datchik['id'];?>" class="btn datchik-delete">удалить</a> <br><br>
                     <?php endforeach; ?>
                     <input type="submit" name="set" value="Установить значения датчиков"> 
-
                 </form>
+
+
+                <?php foreach ($ustroistva as $ustroistvo): if($ustroistvo['trig']==1) {$trig="Вкл";} else {$trig="Выкл";}?>
+
+                    <ul>
+                        <li><?php echo $ustroistvo['name']."(".$trig.")"."<br>"."ID: ".$ustroistvo['id'] ?></li>
+                    </ul>
+
+                <?php endforeach; ?>
+
+
+
                 <br>
 
                 <div class="event_cont"> 
@@ -31,6 +42,8 @@
                             <input type="text" name="value"> <br>
                             <span>Единица измерения</span><br>
                             <input type="text" name="izm"> <br><br>
+                            <span>ID исполнительного устройства</span><br>
+                            <input type="text" name="ustr_id"> <br><br>
                             <input type="submit" name="submit" value="Добавить"> 
                         </form>
                     </div>

@@ -16,13 +16,18 @@ class SiteController {
             $name = htmlspecialchars(trim($_POST['name']));
             $value = htmlspecialchars(trim($_POST['value']));
             $izm = htmlspecialchars(trim($_POST['izm']));
+            $ustr_id = htmlspecialchars(trim($_POST['ustr_id']));
             if (gettype($value) !== "double") {
                 $errors[] = "Значение должно быть числового типа";
             }
-            Model::createDatchik($name, $value, $izm);
+            Model::createDatchik($name, $value, $izm, $ustr_id);
             header("Location: index.php");
         }
         $datchiki = Model::getDatchiki();
+
+        $ustroistva = Model::getUstroistva();
+
+        
 
 
 

@@ -17,7 +17,6 @@
 				</tr>
 				
 
-
 					<?php 
 					//array_unique($data[$i]);
 					$names = array();
@@ -39,13 +38,8 @@
 						    <a href="/cabinet/tumbler/<?php echo $item['id'];?>">тумблер</a><br>
 
 						    <?php endif; ?>
-						    
-
-
 
 						</td>
-
-
 
 					<?php $name = $item['name'];
 					foreach($data as $item): ?>
@@ -53,10 +47,15 @@
 						if($name != $item['name']) {continue;}
 						echo $item['value']. " ".$item['izm'];
 						?></td>
+
+
+						<!--Тест-->
+					
 					<?php endforeach; ?>
 				</tr>
 					<?php endforeach; ?>
 				
+
 
 			</table>
 		</div>

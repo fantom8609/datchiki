@@ -3,20 +3,40 @@
 class Model
 {
     // Добавление датчика
-    public static function createDatchik($name, $value, $izm) {
+    public static function createDatchik($name, $value, $izm, $ustr) {
 
         $db = Db::getConnection();
         // Текст запроса к БД
-        $sql = 'INSERT INTO datchik (name, value, izm) '
-        . 'VALUES (:name, :value, :izm)';
+        $sql = 'INSERT INTO datchik (name, value, izm, ustr_id) '
+        . 'VALUES (:name, :value, :izm, :ustr_id)';
 
         // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
         $result->bindParam(':name', $name, PDO::PARAM_STR);
         $result->bindParam(':value', $value, PDO::PARAM_INT);
         $result->bindParam(':izm', $izm, PDO::PARAM_STR);
+        $result->bindParam(':ustr_id', $ustr_id, PDO::PARAM_STR);
         if($result->execute()) {echo "OK";} else {echo "FAILT";};
         return true;
+    }
+
+
+    public static function getUstroistva()
+    {
+        // Соединение с БД
+        $db = Db::getConnection();
+        // Запрос к БД
+        $result = $db->query('SELECT * FROM ustroistva');
+        // Получение и возврат результатов
+        $i = 0;
+        $list = array();
+        while ($row = $result->fetch()) {
+            $list[$i]['id'] = $row['id'];
+            $list[$i]['name'] = $row['name'];
+            $list[$i]['trig'] = $row['trig'];
+            $i++;
+        }
+        return $list;
     }
 
 
